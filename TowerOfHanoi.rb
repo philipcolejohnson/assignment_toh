@@ -15,6 +15,7 @@ class TowerOfHanoi
   def render
     pedestal_width = @size*2+1
 
+    puts
     puts "*"*(pedestal_width+4)*3
     puts
 
@@ -36,7 +37,7 @@ class TowerOfHanoi
         else
           line_chunk = "|"
         end
-        # binding.pry    
+          
         #adds each pedestal to the current line and centers it
         current_line << line_chunk.center(pedestal_width+4)
       end 
@@ -85,10 +86,11 @@ class TowerOfHanoi
 
       case input.downcase
       when 'q'
-        puts "You made #{@moves} moves. Bye!"
+        puts "You made #{@moves} moves."
+        puts "This conversation can serve no purpose anymore. Goodbye."
         exit
       when /[^1-3]/
-        puts "Sorry. That's not a valid choice. Please try again."
+        puts "Look, Dave. I can see you're really upset about this. I honestly think you ought to sit down calmly, take a stress pill, and think things over."
         try_again=true
       end
     end
@@ -112,8 +114,11 @@ class TowerOfHanoi
 
   #main function
   def play
-    puts "Welcome to the Tower of Hanoi!"
-    
+    puts "Welcome to the TOH 9000."
+    puts "I'm completely operational, and all my circuits are functioning perfectly."
+    puts "You have #{@size} disks."
+    puts "I would win in #{2**@size-1} moves, because I am foolproof and incapable of error."
+    puts "Here is the board. It's a very nice rendering, Dave."
 
     keep_playing = true
     #loop until user quits with a "q"
@@ -129,17 +134,23 @@ class TowerOfHanoi
 
         if self.empty?(from)
           try_again=true
-          puts "Sorry, that pedestal is empty. Try another."
+          puts "Just what do you think you're doing, Dave?"
           next
         end
 
-        to = self.input_move ("To which pedestal (1-3) do you want to move it (press 'q' to quit)? : ")
+        to = self.input_move ("To which pedestal (or 'q' to quit)? : ")
+        puts
 
         #check to make sure they aren't making an illegal move
         if self.illegal?(to, from)
-          puts "Sorry, Dave. I'm afraid you can't do that." 
-          puts "You can only move smaller rings onto larger ones."
+          puts "I'm sorry, Dave. I'm afraid you can't do that."
           try_again=true
+        end
+
+        #same pedestal?
+        if to==from
+          puts "Dave, stop. Stop, will you? Stop, Dave. Will you stop, Dave? Stop, Dave."
+          try_again = true
         end
       end
 
@@ -149,12 +160,16 @@ class TowerOfHanoi
       #check for win
       if self.win?
         self.render
-        puts "You win! It took you #{@moves} moves."
+        puts "You win. It took you #{@moves} moves."
+        if @moves>(2**@size-1)
+          puts "A perfect game is #{2**@size-1} moves."
+          puts "This difference can only be attributable to human error."
+        else
+          puts "You know I have only the most enthusiasm and confidence in this mission, Dave."
+        end
         exit
       end
     end
-
-    
   end
 end
 
