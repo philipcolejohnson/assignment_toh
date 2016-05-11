@@ -4,6 +4,8 @@ class TowerOfHanoi
   def initialize(disks)
     @disks = [[],[],[]]  #our three poles
     @size = disks
+    @moves = 0
+
     disks.downto(1) do |disk_size|
       @disks[0] << disk_size
     end
@@ -51,6 +53,7 @@ class TowerOfHanoi
   #main function
   def play
     puts "Welcome to the Tower of Hanoi!"
+    
 
     keep_playing = true
     #loop until user quits with a "q"
@@ -69,6 +72,7 @@ class TowerOfHanoi
 
         case from.downcase
         when 'q'
+          puts "You made #{@moves} moves. Bye!"
           exit
         when /[1-3]/
           puts "Okay."
@@ -76,9 +80,16 @@ class TowerOfHanoi
           puts "Sorry. That's not a valid choice. Please try again."
           try_again=true
         end
+
+        from = from.to_i
+
+        if @disks[from-1].size == 0
+          try_again=true
+          puts "Sorry, that pedestal is empty. Try another."
+        end
       end
 
-      from = from.to_i
+      
 
       #ask for input and check to make sure it is valid
       try_again=true
@@ -92,6 +103,7 @@ class TowerOfHanoi
         case to.downcase
         when 'q'
           exit
+          puts "You made #{@moves} moves. Bye!"
         when /[1-3]/
           puts "Nice."
         else
@@ -111,9 +123,11 @@ class TowerOfHanoi
 
       #move a disk if possible, otherwise ask for new input
       @disks[to-1] << @disks[from-1].pop
+      @moves += 1
+
       #check for win
       if @disks[2].size == @size
-        puts "You win!"
+        puts "You win! It took you #{@moves} moves."
         exit
       end
     end
