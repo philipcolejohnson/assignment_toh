@@ -3,6 +3,7 @@ require 'pry'
 class TowerOfHanoi
   def initialize(disks)
     @disks = [[],[],[]]  #our three poles
+    @size = disks
     disks.downto(1) do |disk_size|
       @disks[0] << disk_size
     end
@@ -98,12 +99,10 @@ class TowerOfHanoi
           try_again=true
         end
 
-        binding.pry
+        # binding.pry
         to = to.to_i
-        puts @disks[from].last
-        # puts @disks[to].last
 
-        if (@disks[to][0]!=nil) && (@disks[from].last > @disks[to].last)
+        if (@disks[to-1][0]!=nil) && (@disks[from-1].last > @disks[to-1].last)
           puts "Sorry, Dave. I'm afraid you can't do that." 
           puts "You can only move smaller rings onto larger ones."
           try_again=true
@@ -113,6 +112,10 @@ class TowerOfHanoi
       #move a disk if possible, otherwise ask for new input
       @disks[to-1] << @disks[from-1].pop
       #check for win
+      if @disks[2].size == @size
+        puts "You win!"
+        exit
+      end
     end
 
     
