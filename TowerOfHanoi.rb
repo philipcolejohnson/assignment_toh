@@ -46,22 +46,53 @@ class TowerOfHanoi
     puts "*"*(pedestal_width+4)*3
   end
 
-  #get input from the user and check for validity
-  def input_move
-    try_again=true
+  #move a disk
+  def move_disk (to, from)
+    @disks[to-1] << @disks[from-1].pop
+    @moves += 1
+  end
 
+  #check for a winning condition
+  def win?
+    return true if @disks[2].size == @size
+    false
+  end
+
+  #an empty pedestal?
+  def empty?(pedestal)
+    if @disks[pedestal-1].size == 0
+      return true
+    end
+    false
+  end
+
+  #an illegal move?
+  def illegal?(to, from)
+    if (@disks[to-1][0]!=nil) && (@disks[from-1].last > @disks[to-1].last)
+      return true
+    end
+    false
+  end
+
+  #get input from the user and check for validity
+  def input_move(message)
+    try_again = true
     while (try_again)
       try_again=false
 
-      print "From which pedestal would you like to move (or press 'q' to quit)? : "
-      user_input = gets.chomp
-      if invalid?(user_input)
-        try_again = true 
-        puts "Invalid. Please try again."
+      print message
+      input = gets.chomp
+
+      case input.downcase
+      when 'q'
+        puts "You made #{@moves} moves. Bye!"
+        exit
+      when /[^1-3]/
+        puts "Sorry. That's not a valid choice. Please try again."
+        try_again=true
       end
     end
-
-    user_input
+    input = input.to_i
   end
 
   def invalid?(user_input)
@@ -87,76 +118,36 @@ class TowerOfHanoi
     keep_playing = true
     #loop until user quits with a "q"
     while (keep_playing) do
-      #render the current board
-      self.render
-      
       #ask for input and check to make sure it is valid
       try_again=true
-
       while (try_again)
+        #render the current board
+        self.render
         try_again=false
 
-        print "From which pedestal (1-3) would you like to move (or press 'q' to quit)? : "
-        from = gets.chomp
+        from = self.input_move("From which pedestal (1-3) would you like to move (or press 'q' to quit)? : ")
 
-        case from.downcase
-        when 'q'
-          puts "You made #{@moves} moves. Bye!"
-          exit
-        when /[1-3]/
-          puts "Okay."
-        else
-          puts "Sorry. That's not a valid choice. Please try again."
-          try_again=true
-        end
-
-        from = from.to_i
-
-        if @disks[from-1].size == 0
+        if self.empty?(from)
           try_again=true
           puts "Sorry, that pedestal is empty. Try another."
-        end
-      end
-
-      
-
-      #ask for input and check to make sure it is valid
-      try_again=true
-
-      while (try_again)
-        try_again=false
-
-        print "And to which pedestal (1-3) do you want to move it (or press 'q' to quit)? : "
-        to = gets.chomp
-
-        case to.downcase
-        when 'q'
-          exit
-          puts "You made #{@moves} moves. Bye!"
-        when /[1-3]/
-          puts "Nice."
-        else
-          puts "Sorry. That's not a valid choice. Please try again."
-          try_again=true
+          next
         end
 
-        # binding.pry
-        to = to.to_i
+        to = self.input_move ("To which pedestal (1-3) do you want to move it (press 'q' to quit)? : ")
 
         #check to make sure they aren't making an illegal move
-        if (@disks[to-1][0]!=nil) && (@disks[from-1].last > @disks[to-1].last)
+        if self.illegal?(to, from)
           puts "Sorry, Dave. I'm afraid you can't do that." 
           puts "You can only move smaller rings onto larger ones."
           try_again=true
         end
       end
 
-      #move a disk
-      @disks[to-1] << @disks[from-1].pop
-      @moves += 1
+      #we're good! move a disk
+      self.move_disk(to, from)
 
       #check for win
-      if @disks[2].size == @size
+      if self.win?
         self.render
         puts "You win! It took you #{@moves} moves."
         exit
