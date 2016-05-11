@@ -13,8 +13,10 @@ class TowerOfHanoi
 
   #displays the current board
   def render
-    puts
     pedestal_width = @size*2+1
+
+    puts "*"*(pedestal_width+4)*3
+    puts
 
     (@size).downto(1) do |line_number|
       current_line = ""
@@ -41,7 +43,7 @@ class TowerOfHanoi
 
       puts current_line
     end
-    puts
+    puts "*"*(pedestal_width+4)*3
   end
 
   #get input from the user and check for validity
@@ -155,8 +157,8 @@ class TowerOfHanoi
 
       #check for win
       if @disks[2].size == @size
-        puts "You win! It took you #{@moves} moves."
         self.render
+        puts "You win! It took you #{@moves} moves."
         exit
       end
     end
