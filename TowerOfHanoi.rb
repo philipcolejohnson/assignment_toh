@@ -127,22 +127,22 @@ class TowerOfHanoi
       try_again=true
       while (try_again)
         #render the current board
-        self.render
+        render
         try_again=false
 
-        from = self.input_move("From which pedestal (1-3) would you like to move (or press 'q' to quit)? : ")
+        from = input_move("From which pedestal (1-3) would you like to move (or press 'q' to quit)? : ")
 
-        if self.empty?(from)
+        if empty?(from)
           try_again=true
           puts "Just what do you think you're doing, Dave?"
           next
         end
 
-        to = self.input_move ("To which pedestal (or 'q' to quit)? : ")
+        to = input_move ("To which pedestal (or 'q' to quit)? : ")
         puts
 
         #check to make sure they aren't making an illegal move
-        if self.illegal?(to, from)
+        if illegal?(to, from)
           puts "I'm sorry, Dave. I'm afraid you can't do that."
           try_again=true
         end
@@ -155,11 +155,11 @@ class TowerOfHanoi
       end
 
       #we're good! move a disk
-      self.move_disk(to, from)
+      move_disk(to, from)
 
       #check for win
-      if self.win?
-        self.render
+      if win?
+        render
         puts "You win. It took you #{@moves} moves."
         if @moves>(2**@size-1)
           puts "A perfect game is #{2**@size-1} moves."
