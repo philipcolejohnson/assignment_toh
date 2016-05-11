@@ -13,8 +13,35 @@ class TowerOfHanoi
 
   #displays the current board
   def render
-    puts "Current Board:"
-    puts "#{@disks}"
+    puts
+    pedestal_width = @size*2+1
+
+    (@size).downto(1) do |line_number|
+      current_line = ""
+
+      @disks.each do |pedestal|
+        line_chunk = ""
+        if pedestal.size >= line_number
+          #construct a string that is the current disk on the pedestal
+          
+          pedestal[line_number-1].times do
+            line_chunk << "o"
+          end
+          line_chunk << "|"
+          pedestal[line_number-1].times do
+            line_chunk << "o"
+          end
+        else
+          line_chunk = "|"
+        end
+        # binding.pry    
+        #adds each pedestal to the current line and centers it
+        current_line << line_chunk.center(pedestal_width+4)
+      end 
+
+      puts current_line
+    end
+    puts
   end
 
   #get input from the user and check for validity
@@ -114,6 +141,7 @@ class TowerOfHanoi
         # binding.pry
         to = to.to_i
 
+        #check to make sure they aren't making an illegal move
         if (@disks[to-1][0]!=nil) && (@disks[from-1].last > @disks[to-1].last)
           puts "Sorry, Dave. I'm afraid you can't do that." 
           puts "You can only move smaller rings onto larger ones."
@@ -121,13 +149,14 @@ class TowerOfHanoi
         end
       end
 
-      #move a disk if possible, otherwise ask for new input
+      #move a disk
       @disks[to-1] << @disks[from-1].pop
       @moves += 1
 
       #check for win
       if @disks[2].size == @size
         puts "You win! It took you #{@moves} moves."
+        self.render
         exit
       end
     end
