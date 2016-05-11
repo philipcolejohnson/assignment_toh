@@ -165,7 +165,7 @@ class TowerOfHanoi
           puts "A perfect game is #{2**@size-1} moves."
           puts "This difference can only be attributable to human error."
         else
-          puts "You know I have only the most enthusiasm and confidence in this mission, Dave."
+          puts "You know I have only the utmost enthusiasm and confidence in this mission, Dave."
         end
         exit
       end
